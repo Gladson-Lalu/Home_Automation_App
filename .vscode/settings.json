@@ -1,0 +1,35 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        ".dart_tool": true,
+        ".idea": true,
+        ".vscode": true,
+        "README.md": true,
+        "pubspec.lock": true,
+        ".metadata": true,
+        "home_automation.iml": true,
+        "analysis_options.yaml": true,
+        ".gitignore": true,
+        "build": true
+    },
+    "hide-files.files": [
+        ".dart_tool",
+        ".idea",
+        ".vscode",
+        "README.md",
+        "pubspec.lock",
+        ".metadata",
+        "home_automation.iml",
+        "analysis_options.yaml",
+        ".gitignore",
+        "build"
+    ],
+    "cSpell.words": [
+        "Typer"
+    ]
+}
