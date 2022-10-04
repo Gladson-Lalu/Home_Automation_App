@@ -5,7 +5,8 @@ const Color lightScaffoldBG = Color(0xffF9F9F3);
 const Color lightTitlecolor = Color(0xff2E3151);
 const Color lightContainerBG = Color(0xff009EFA);
 const Color lightContainerText = Color(0xffF9F9F3);
-const Color lightPrimaryColor = Color(0xff009EFA);
+const Color lightSecondaryColor = Color(0xffF9F9F3);
+const Color lightPrimaryColor = Color(0xffF9F9F3);
 
 const Color darkScaffoldBG = Color(0xff152C39);
 const Color darkTitlecolor = Color(0xffF9F9F3);

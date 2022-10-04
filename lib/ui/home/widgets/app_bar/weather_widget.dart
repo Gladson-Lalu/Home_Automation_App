@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import '../../../cubit/location/home_location_cubit.dart';
-import '../../../domain/Service/location_service.dart';
 
-import '../../../cubit/weather/weather_cubit.dart';
+import '../../../../cubit/location/home_location_cubit.dart';
+import '../../../../domain/Service/location_service.dart';
+
+import '../../../../cubit/weather/weather_cubit.dart';
 import 'weather_detail_tile.dart';
+import 'weather_icon_and_temperature.dart';
 
 //capitalize extension to String
 extension StringExtension on String {
@@ -89,7 +90,8 @@ class _WeatherWidgetState extends State<WeatherWidget> {
                 child: CircularProgressIndicator(
                     color: Theme.of(context)
                         .colorScheme
-                        .secondary),
+                        .secondary,
+                    strokeWidth: 2),
               ),
             );
           } else if (state is WeatherLoaded) {
@@ -106,49 +108,8 @@ class _WeatherWidgetState extends State<WeatherWidget> {
                           horizontal: 20, vertical: 0),
                       child: Column(children: [
                         const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/${state.weather.icon}.svg',
-                              width: 110,
-                              height: 110,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Wrap(
-                              crossAxisAlignment:
-                                  WrapCrossAlignment.end,
-                              children: [
-                                Text(
-                                  '${state.weather.temperature}°',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                          fontSize: 38,
-                                          fontWeight:
-                                              FontWeight
-                                                  .w600),
-                                ),
-                                const SizedBox(
-                                  width: 2,
-                                ),
-                                Text('C',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium!
-                                        .copyWith(
-                                            fontSize: 32,
-                                            fontWeight:
-                                                FontWeight
-                                                    .w600)),
-                              ],
-                            ),
-                          ],
-                        ),
+                        WeatherIconAndTemperature(
+                            weather: state.weather),
                         Text(
                           state.weather.description
                               .capitalize(),

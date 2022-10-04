@@ -6,7 +6,10 @@ import 'colors.dart';
 class AppTheme {
   static final lightTheme = ThemeData(
     cardColor: lightContainerBG,
+    primaryColor: lightPrimaryColor,
     backgroundColor: lightScaffoldBG,
+    colorScheme: const ColorScheme.dark(
+        secondary: lightSecondaryColor),
     textTheme: TextTheme(
       labelMedium:
           GoogleFonts.oswald(color: lightContainerText),
