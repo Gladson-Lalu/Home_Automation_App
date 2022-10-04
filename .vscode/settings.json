@@ -13,9 +13,10 @@
         "pubspec.lock": true,
         ".metadata": true,
         "home_automation.iml": true,
-        "analysis_options.yaml": true,
-        ".gitignore": true,
-        "build": true
+        "build": true,
+        ".flutter-plugins": true,
+        ".flutter-plugins-dependencies": true,
+        "ios": true
     },
     "hide-files.files": [
         ".dart_tool",
@@ -25,11 +26,22 @@
         "pubspec.lock",
         ".metadata",
         "home_automation.iml",
-        "analysis_options.yaml",
-        ".gitignore",
-        "build"
+        "build",
+        ".flutter-plugins",
+        ".flutter-plugins-dependencies",
+        "ios"
     ],
     "cSpell.words": [
+        "dotenv",
+        "niconne",
+        "OPENWEATHERMAP",
+        "Placemark",
+        "placemarks",
+        "prefs",
+        "Primarycolor",
+        "roboto",
+        "Textcolor",
+        "Titlecolor",
         "Typer"
     ]
 }
