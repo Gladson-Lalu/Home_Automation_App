@@ -9,15 +9,15 @@ import '../../domain/model/settings_model.dart';
 part 'settings_state.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
-  SharedPreferences? _prefs;
+  final SharedPreferences _prefs;
 
-  SettingsCubit() : super(const SettingsInitial());
+  SettingsCubit(this._prefs)
+      : super(const SettingsInitial());
 
   Future<void> getSettings() async {
     try {
-      _prefs ??= await SharedPreferences.getInstance();
       final String? settingsString =
-          _prefs!.getString('settings');
+          _prefs.getString('settings');
       if (settingsString != null) {
         final Settings settings =
             Settings.fromJson(jsonDecode(settingsString));
@@ -31,8 +31,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   Future<void> saveSettings(Settings settings) async {
-    _prefs ??= await SharedPreferences.getInstance();
-    await _prefs!.setString(
+    await _prefs.setString(
         'settings', jsonEncode(settings.toMap()));
     emit(SettingsLoaded(settings));
   }

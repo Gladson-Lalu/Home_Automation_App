@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:home_automation/cubit/theme_mode/theme_mode_cubit.dart';
 
 import 'dashboard_list_tile.dart';
 
@@ -30,6 +32,44 @@ class CustomDrawer extends StatelessWidget {
                           fontSize: 24,
                           fontWeight: FontWeight.w600)),
                   const Spacer(),
+                  //change theme dark and light button
+                  InkWell(
+                      onTap: () {},
+                      borderRadius:
+                          BorderRadius.circular(30),
+                      splashColor: Theme.of(context)
+                          .textTheme
+                          .labelMedium!
+                          .color!
+                          .withOpacity(0.2),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            right: 10),
+                        child: IconButton(
+                            icon: BlocProvider.of<
+                                                ThemeModeCubit>(
+                                            context)
+                                        .state
+                                        .themeMode ==
+                                    ThemeMode.light
+                                ? Icon(
+                                    Icons.nightlight_round,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color)
+                                : Icon(Icons.wb_sunny,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color),
+                            onPressed: () {
+                              BlocProvider.of<
+                                          ThemeModeCubit>(
+                                      context)
+                                  .toggleThemeMode();
+                            }),
+                      )),
                   InkWell(
                     onTap: () {
                       Navigator.pop(context);

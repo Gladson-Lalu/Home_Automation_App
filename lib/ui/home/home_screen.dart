@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:home_automation/config/sample_devices.dart';
@@ -26,6 +24,44 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // bottomNavigationBar: BottomAppBar(
+      //   color: Theme.of(context).cardColor,
+      //   shape: const CircularNotchedRectangle(),
+      //   child: SizedBox(
+      //     height: 60,
+      //     child: Row(
+      //       mainAxisAlignment:
+      //           MainAxisAlignment.spaceAround,
+      //       children: [
+      //         IconButton(
+      //           onPressed: () {},
+      //           icon: const Icon(Icons.home),
+      //         ),
+      //         //profile button
+      //         IconButton(
+      //           onPressed: () {},
+      //           icon: const Icon(Icons.person),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
+      floatingActionButtonAnimator:
+          FloatingActionButtonAnimator.scaling,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked,
+      //voice assistant button at bottom center
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: FloatingActionButton(
+          elevation: 10,
+          onPressed: () {},
+          backgroundColor:
+              Theme.of(context).backgroundColor,
+          child: Icon(Icons.mic,
+              color: Theme.of(context).focusColor),
+        ),
+      ),
       backgroundColor: Theme.of(context).backgroundColor,
       //title: 'Home Automation' and weather widget in flexible space
       body: DoubleBackToCloseApp(
@@ -83,6 +119,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           .length,
                 ),
               ),
+            ),
+            //Sized box
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 20),
             ),
           ],
         ),

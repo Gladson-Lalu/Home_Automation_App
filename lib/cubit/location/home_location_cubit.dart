@@ -11,21 +11,23 @@ import '../../domain/model/home_location.dart';
 part 'home_location_state.dart';
 
 class HomeLocationCubit extends Cubit<HomeLocationState> {
-  SharedPreferences? _prefs;
+  final SharedPreferences _prefs;
   final WeatherCubit _weatherCubit;
-  HomeLocationCubit(this._weatherCubit)
+  HomeLocationCubit(this._weatherCubit, this._prefs)
       : super(const HomeLocationInitial());
 
   //get location
   Future<void> getHomeLocation() async {
-    _prefs ??= await SharedPreferences.getInstance();
     final String? homeLocationString =
-        _prefs!.getString('homeLocation');
+        _prefs.getString('homeLocation');
     if (homeLocationString != null) {
       final HomeLocation homeLocation =
           HomeLocation.fromJson(
               jsonDecode(homeLocationString));
       emit(HomeLocationLoaded(homeLocation));
+      _weatherCubit.getWeather(
+          latitude: homeLocation.latitude,
+          longitude: homeLocation.longitude);
     } else {
       emit(const HomeLocationInitial());
     }
@@ -34,8 +36,7 @@ class HomeLocationCubit extends Cubit<HomeLocationState> {
   //save location
   Future<void> saveHomeLocation(
       HomeLocation homeLocation) async {
-    _prefs ??= await SharedPreferences.getInstance();
-    await _prefs!.setString(
+    await _prefs.setString(
         'homeLocation', jsonEncode(homeLocation.toMap()));
     emit(HomeLocationLoaded(homeLocation));
     _weatherCubit.getWeather(
