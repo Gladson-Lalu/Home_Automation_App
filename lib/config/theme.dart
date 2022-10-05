@@ -7,6 +7,7 @@ class AppTheme {
   static final lightTheme = ThemeData(
     cardColor: lightContainerBG,
     primaryColor: lightPrimaryColor,
+    focusColor: lightFocusColor,
     backgroundColor: lightScaffoldBG,
     colorScheme: const ColorScheme.dark(
         secondary: lightSecondaryColor),
@@ -29,6 +30,7 @@ class AppTheme {
     primaryColor: darkPrimarycolor,
     backgroundColor: darkScaffoldBG,
     cardColor: darkContainerBG,
+    focusColor: darkFocusColor,
     colorScheme:
         const ColorScheme.dark(secondary: darkSecondaryBG),
     textTheme: TextTheme(

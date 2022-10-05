@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'dashboard_list_tile.dart';
 
-class CustomDashboard extends StatelessWidget {
-  const CustomDashboard({
+class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({
     Key? key,
   }) : super(key: key);
 

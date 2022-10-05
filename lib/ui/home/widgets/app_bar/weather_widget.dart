@@ -162,21 +162,21 @@ class _WeatherWidgetState extends State<WeatherWidget> {
                           children: [
                             WeatherDetailTile(
                               assetPath:
-                                  'assets/icons/wind.png',
+                                  'assets/icons/weather/wind.png',
                               title:
                                   '${state.weather.wind} km/h',
                             ),
                             const SizedBox(width: 30),
                             WeatherDetailTile(
                               assetPath:
-                                  'assets/icons/humidity.png',
+                                  'assets/icons/weather/humidity.png',
                               title:
                                   '${state.weather.humidity} %',
                             ),
                             const SizedBox(width: 30),
                             WeatherDetailTile(
                               assetPath:
-                                  'assets/icons/cloudy.png',
+                                  'assets/icons/weather/cloudy.png',
                               title:
                                   '${state.weather.cloudiness} %',
                             ),

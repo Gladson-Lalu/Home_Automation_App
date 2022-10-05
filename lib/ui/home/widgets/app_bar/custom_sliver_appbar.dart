@@ -12,10 +12,11 @@ class CustomSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      pinned: true,
       automaticallyImplyLeading: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(30),
+          bottom: Radius.circular(10),
         ),
       ),
       backgroundColor: Theme.of(context).cardColor,
@@ -46,7 +47,10 @@ class CustomSliverAppBar extends StatelessWidget {
                   'assets/icons/menuAlt1.svg',
                   width: 30,
                   height: 30,
-                  color: Theme.of(context).primaryColor),
+                  color: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .color),
             ),
           ),
         ],

@@ -6,13 +6,15 @@ const Color lightTitlecolor = Color(0xff2E3151);
 const Color lightContainerBG = Color(0xff009EFA);
 const Color lightContainerText = Color(0xffF9F9F3);
 const Color lightSecondaryColor = Color(0xffF9F9F3);
-const Color lightPrimaryColor = Color(0xffF9F9F3);
+const Color lightFocusColor = Color(0xff0089af);
+const Color lightPrimaryColor = Color(0xffFFFFFF);
 
 const Color darkScaffoldBG = Color(0xff152C39);
 const Color darkTitlecolor = Color(0xffF9F9F3);
-const Color darkContainerBG = Color(0xff4B7F52);
+const Color darkContainerBG = Color(0xff435137);
 const Color darkSecondaryBG = Color(0xff11B5E4);
 const Color darkContainerText = Color(0xffF9F9F3);
+const Color darkFocusColor = Color(0xffffffff);
 const Color darkTextcolor =
     Color.fromARGB(255, 236, 236, 236);
-const Color darkPrimarycolor = Color(0xffF9F9F3);
+Color darkPrimarycolor = const Color(0xff00a18c);

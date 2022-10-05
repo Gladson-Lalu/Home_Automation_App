@@ -23,7 +23,7 @@ class DashboardListTile extends StatelessWidget {
                   .textTheme
                   .bodyText1!
                   .color,
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.w600)),
     );
   }

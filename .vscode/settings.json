@@ -32,17 +32,34 @@
         "ios"
     ],
     "cSpell.words": [
+        "aircooler",
+        "airpurifier",
+        "ceilingfan",
+        "ceilinglamp",
         "dotenv",
+        "electrickettle",
         "heroicons",
+        "mircowave",
         "niconne",
         "OPENWEATHERMAP",
+        "pedestalfan",
         "Placemark",
         "placemarks",
         "prefs",
         "Primarycolor",
         "roboto",
+        "tablefan",
+        "tablelamp",
         "Textcolor",
         "Titlecolor",
-        "Typer"
+        "Typer",
+        "washingmachine",
+        "watercooler",
+        "waterdispenser",
+        "waterfilter",
+        "waterheater",
+        "waterpump",
+        "waterpurifier",
+        "watersoftener"
     ]
 }
