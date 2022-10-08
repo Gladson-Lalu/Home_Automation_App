@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:home_automation/cubit/theme_mode/theme_mode_cubit.dart';
+import '../../../../cubit/theme_mode/theme_mode_cubit.dart';
 
 import 'dashboard_list_tile.dart';
 

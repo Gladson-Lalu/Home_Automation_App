@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../extensions/capitalize.dart';
 
 import '../../../../cubit/location/home_location_cubit.dart';
 import '../../../../domain/Service/location_service.dart';
@@ -7,13 +8,6 @@ import '../../../../domain/Service/location_service.dart';
 import '../../../../cubit/weather/weather_cubit.dart';
 import 'weather_detail_tile.dart';
 import 'weather_icon_and_temperature.dart';
-
-//capitalize extension to String
-extension StringExtension on String {
-  String capitalize() {
-    return "${this[0].toUpperCase()}${substring(1)}";
-  }
-}
 
 class WeatherWidget extends StatefulWidget {
   const WeatherWidget({Key? key}) : super(key: key);

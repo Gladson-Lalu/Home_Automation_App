@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:home_automation/domain/repository/speech/speech_repository.dart';
+import '../../domain/repository/speech/speech_repository.dart';
 
 part 'voice_state.dart';
 
