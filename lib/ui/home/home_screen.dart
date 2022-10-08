@@ -1,7 +1,11 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:home_automation/config/sample_devices.dart';
+import 'package:home_automation/cubit/voice/voice_cubit.dart';
 import 'package:home_automation/domain/model/device.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:home_automation/ui/home/widgets/app_bar/custom_sliver_appbar.dart';
 
 import 'widgets/drawer/custom_drawer.dart';
@@ -24,28 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // bottomNavigationBar: BottomAppBar(
-      //   color: Theme.of(context).cardColor,
-      //   shape: const CircularNotchedRectangle(),
-      //   child: SizedBox(
-      //     height: 60,
-      //     child: Row(
-      //       mainAxisAlignment:
-      //           MainAxisAlignment.spaceAround,
-      //       children: [
-      //         IconButton(
-      //           onPressed: () {},
-      //           icon: const Icon(Icons.home),
-      //         ),
-      //         //profile button
-      //         IconButton(
-      //           onPressed: () {},
-      //           icon: const Icon(Icons.person),
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
       floatingActionButtonAnimator:
           FloatingActionButtonAnimator.scaling,
       floatingActionButtonLocation:
@@ -53,9 +35,232 @@ class _HomeScreenState extends State<HomeScreen> {
       //voice assistant button at bottom center
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10),
+        //voice assistant button
         child: FloatingActionButton(
           elevation: 10,
-          onPressed: () {},
+          onPressed: () {
+            BlocProvider.of<VoiceCubit>(context)
+                .startListening();
+            //show voice assistant in bottom sheet
+
+            showModalBottomSheet(
+                isDismissible: false,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20))),
+                backgroundColor:
+                    Theme.of(context).backgroundColor,
+                context: context,
+                builder: (ctx) {
+                  const animationDuration =
+                      Duration(milliseconds: 3000);
+                  return BlocConsumer<VoiceCubit,
+                          VoiceState>(
+                      listener: (context, state) {
+                    if (state is VoiceError) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(
+                        content: Text(state.error),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(20)),
+                        margin: EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                            bottom: MediaQuery.of(context)
+                                    .size
+                                    .height -
+                                100),
+                      ));
+                    } else if (state is VoiceDone) {
+                      Navigator.of(context).pop();
+                    }
+                  }, builder: (context, VoiceState state) {
+                    return SizedBox(
+                      height: 300,
+                      child: Stack(children: [
+                        Center(
+                          child: state is VoiceInitial
+                              ? const AnimatedSwitcher(
+                                  duration:
+                                      animationDuration,
+                                  child: Text(
+                                    'Say something like "Turn on the light"',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight:
+                                            FontWeight
+                                                .bold),
+                                  ),
+                                )
+                              : state is VoiceListening
+                                  ? const AnimatedSwitcher(
+                                      duration:
+                                          animationDuration,
+                                      child: Text(
+                                        'Listening...',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight:
+                                                FontWeight
+                                                    .bold),
+                                      ),
+                                    )
+                                  : state is VoiceRecognized
+                                      ? AnimatedSwitcher(
+                                          duration:
+                                              animationDuration,
+                                          child: Text(
+                                            state
+                                                .recognizedText,
+                                            style: const TextStyle(
+                                                fontSize:
+                                                    20,
+                                                fontWeight:
+                                                    FontWeight
+                                                        .bold),
+                                          ),
+                                        )
+                                      : state is VoiceProcessing
+                                          ? AnimatedTextKit(
+                                              animatedTexts: [
+                                                FadeAnimatedText(
+                                                  'Processing...',
+                                                  textStyle: const TextStyle(
+                                                      fontSize:
+                                                          20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  duration:
+                                                      animationDuration,
+                                                ),
+                                                FadeAnimatedText(
+                                                  'Wait a moment',
+                                                  textStyle: const TextStyle(
+                                                      fontSize:
+                                                          20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  duration:
+                                                      animationDuration,
+                                                ),
+                                                FadeAnimatedText(
+                                                  'Almost done!',
+                                                  textStyle: const TextStyle(
+                                                      fontSize:
+                                                          20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  duration:
+                                                      animationDuration,
+                                                ),
+                                                FadeAnimatedText(
+                                                  'Just a second',
+                                                  textStyle: const TextStyle(
+                                                      fontSize:
+                                                          20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  duration:
+                                                      animationDuration,
+                                                ),
+                                              ],
+                                              isRepeatingAnimation:
+                                                  true,
+                                            )
+                                          : state is VoiceError
+                                              ? Text(
+                                                  state
+                                                      .error,
+                                                  style: const TextStyle(
+                                                      fontSize:
+                                                          20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )
+                                              : const Text(
+                                                  'Say something like "Turn on the light"',
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: IconButton(
+                              onPressed: () {
+                                BlocProvider.of<VoiceCubit>(
+                                        context)
+                                    .stopListening();
+                              },
+                              icon: Icon(
+                                Icons.close,
+                                color: Theme.of(context)
+                                    .focusColor,
+                              )),
+                        ),
+                        //bottom center voice assistant button
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: state is VoiceInitial
+                              ? Padding(
+                                  padding:
+                                      const EdgeInsets.only(
+                                          bottom: 10),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      BlocProvider.of<
+                                                  VoiceCubit>(
+                                              context)
+                                          .startListening();
+                                    },
+                                    icon: Icon(Icons.mic,
+                                        color: Theme.of(
+                                                context)
+                                            .focusColor,
+                                        size: 30),
+                                  ),
+                                )
+                              : state is VoiceListening ||
+                                      state
+                                          is VoiceRecognized
+                                  ? Padding(
+                                      padding: const EdgeInsets
+                                          .only(bottom: 25),
+                                      //show voice assistant animation
+                                      child: LoadingAnimationWidget
+                                          .waveDots(
+                                              color: Theme.of(
+                                                      context)
+                                                  .cardColor,
+                                              size: 50))
+                                  : state is VoiceProcessing
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets
+                                                      .only(
+                                                  bottom:
+                                                      25),
+                                          child: LoadingAnimationWidget
+                                              .horizontalRotatingDots(
+                                            size: 40,
+                                            color: Theme.of(
+                                                    context)
+                                                .focusColor,
+                                          ),
+                                        )
+                                      : const SizedBox(),
+                        ),
+                      ]),
+                    );
+                  });
+                });
+          },
           backgroundColor:
               Theme.of(context).backgroundColor,
           child: Icon(Icons.mic,
@@ -77,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: SizedBox(height: 30),
             ),
             //tabs of rooms
-            buildRoomHeader(context),
+            buildRoomHeader(),
             const SliverToBoxAdapter(
               child: SizedBox(height: 30),
             ),
@@ -99,26 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       MediaQuery.of(context).size.width *
                           0.03,
                   vertical: 10),
-              sliver: SliverGrid(
-                gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
-                  childAspectRatio: 1.3,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return buildDeviceCard(
-                        context,
-                        sampleDevices[selectedRoomIndex]
-                            [index]);
-                  },
-                  childCount:
-                      sampleDevices[selectedRoomIndex]
-                          .length,
-                ),
-              ),
+              sliver: buildGridList(),
             ),
             //Sized box
             const SliverToBoxAdapter(
@@ -131,7 +317,26 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SliverToBoxAdapter buildRoomHeader(BuildContext context) {
+  SliverGrid buildGridList() {
+    return SliverGrid(
+      gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 20,
+        crossAxisSpacing: 20,
+        childAspectRatio: 1.3,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return buildDeviceCard(context,
+              sampleDevices[selectedRoomIndex][index]);
+        },
+        childCount: sampleDevices[selectedRoomIndex].length,
+      ),
+    );
+  }
+
+  SliverToBoxAdapter buildRoomHeader() {
     return SliverToBoxAdapter(
       child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.03,

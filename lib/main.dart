@@ -5,7 +5,9 @@ import 'package:home_automation/config/theme.dart';
 import 'package:home_automation/cubit/location/home_location_cubit.dart';
 import 'package:home_automation/cubit/settings/settings_cubit.dart';
 import 'package:home_automation/cubit/theme_mode/theme_mode_cubit.dart';
-import 'package:home_automation/domain/repository/weather_repository_impl.dart';
+import 'package:home_automation/cubit/voice/voice_cubit.dart';
+import 'package:home_automation/domain/repository/speech/speech_repository_impl.dart';
+import 'package:home_automation/domain/repository/weather/weather_repository_impl.dart';
 import 'package:home_automation/ui/splash/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,7 +45,10 @@ class MyApp extends StatelessWidget {
                 SettingsCubit(preferences)),
         BlocProvider(
             create: (context) =>
-                ThemeModeCubit(preferences))
+                ThemeModeCubit(preferences)),
+        BlocProvider(
+            create: (context) =>
+                VoiceCubit(SpeechRepositoryImpl())),
       ],
       child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
         builder: (context, state) {
