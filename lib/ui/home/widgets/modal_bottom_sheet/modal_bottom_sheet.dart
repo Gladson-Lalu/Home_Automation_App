@@ -17,18 +17,12 @@ class VoiceBottomSheet extends StatelessWidget {
       child: BlocConsumer<VoiceCubit, VoiceState>(
           listener: (context, state) {
         if (state is VoiceError) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(
-            content: Text(state.error),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)),
-            margin: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                bottom: MediaQuery.of(context).size.height -
-                    100),
-          ));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.error),
+            ),
+          );
+          Navigator.of(context).pop();
         } else if (state is VoiceDone) {
           Navigator.of(context).pop();
         }
@@ -36,106 +30,129 @@ class VoiceBottomSheet extends StatelessWidget {
         const animationDuration =
             Duration(milliseconds: 3000);
         return Stack(children: [
-          Center(
-            child: state is VoiceInitial
-                ? const AnimatedSwitcher(
-                    duration: animationDuration,
-                    child: Text(
-                      'Say something like "Turn on the light"',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  )
-                : state is VoiceListening
-                    ? const AnimatedSwitcher(
-                        duration: animationDuration,
-                        child: Text(
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 20, vertical: 10),
+            child: Center(
+              child: state is VoiceInitial
+                  ? const AnimatedSwitcher(
+                      duration: animationDuration,
+                      child: Text(
+                        'Say something like "Turn on the light in living room"',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  : state is VoiceListening
+                      ? const Text(
                           'Listening...',
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    : state is VoiceRecognized
-                        ? AnimatedSwitcher(
-                            duration: animationDuration,
-                            child: Text(
-                              state.recognizedText
-                                  .capitalize(),
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight:
-                                      FontWeight.bold),
-                            ),
-                          )
-                        : state is VoiceProcessing
-                            ? AnimatedTextKit(
-                                animatedTexts: [
-                                  FadeAnimatedText(
-                                    'Processing...',
-                                    textStyle:
-                                        const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight:
-                                                FontWeight
-                                                    .bold),
-                                    duration:
-                                        animationDuration,
-                                  ),
-                                  FadeAnimatedText(
-                                    'Wait a moment',
-                                    textStyle:
-                                        const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight:
-                                                FontWeight
-                                                    .bold),
-                                    duration:
-                                        animationDuration,
-                                  ),
-                                  FadeAnimatedText(
-                                    'Almost done!',
-                                    textStyle:
-                                        const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight:
-                                                FontWeight
-                                                    .bold),
-                                    duration:
-                                        animationDuration,
-                                  ),
-                                  FadeAnimatedText(
-                                    'Just a second',
-                                    textStyle:
-                                        const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight:
-                                                FontWeight
-                                                    .bold),
-                                    duration:
-                                        animationDuration,
-                                  ),
-                                ],
-                                isRepeatingAnimation: true,
-                              )
-                            : state is VoiceError
-                                ? Text(
-                                    state.error,
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight:
-                                            FontWeight
-                                                .bold),
-                                  )
-                                : const Text(
-                                    'Say something like "Turn on the light"',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight:
-                                            FontWeight
-                                                .bold),
-                                  ),
+                        )
+                      : state is VoiceRecognized
+                          ? AnimatedSwitcher(
+                              duration: animationDuration,
+                              child: Text(
+                                state.recognizedText
+                                    .capitalize(),
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight:
+                                        FontWeight.bold),
+                              ),
+                            )
+                          : state is VoiceProcessing
+                              ? AnimatedTextKit(
+                                  animatedTexts: [
+                                    FadeAnimatedText(
+                                      'Processing...',
+                                      textStyle:
+                                          const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight:
+                                                  FontWeight
+                                                      .bold),
+                                      duration:
+                                          animationDuration,
+                                    ),
+                                    FadeAnimatedText(
+                                      'Wait a moment',
+                                      textStyle:
+                                          const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight:
+                                                  FontWeight
+                                                      .bold),
+                                      duration:
+                                          animationDuration,
+                                    ),
+                                    FadeAnimatedText(
+                                      'Almost done!',
+                                      textStyle:
+                                          const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight:
+                                                  FontWeight
+                                                      .bold),
+                                      duration:
+                                          animationDuration,
+                                    ),
+                                    FadeAnimatedText(
+                                      'Just a second',
+                                      textStyle:
+                                          const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight:
+                                                  FontWeight
+                                                      .bold),
+                                      duration:
+                                          animationDuration,
+                                    ),
+                                  ],
+                                  isRepeatingAnimation:
+                                      true,
+                                )
+                              : state is VoiceResponse
+                                  ? Text(
+                                      state.response
+                                          .capitalize(),
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight:
+                                              FontWeight
+                                                  .bold),
+                                    )
+                                  : state is VoiceError
+                                      // ignore: prefer_const_constructors
+                                      ? AnimatedSwitcher(
+                                          duration:
+                                              animationDuration,
+                                          child: const Text(
+                                            "something went wrong",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    20,
+                                                fontWeight:
+                                                    FontWeight
+                                                        .bold),
+                                          ),
+                                        )
+                                      : const AnimatedSwitcher(
+                                          duration:
+                                              animationDuration,
+                                          child: Text(
+                                            'Say something like "Turn on the light in the living room"',
+                                            style: TextStyle(
+                                                fontSize:
+                                                    20,
+                                                fontWeight:
+                                                    FontWeight
+                                                        .bold),
+                                          ),
+                                        ),
+            ),
           ),
           Positioned(
             bottom: 0,
@@ -153,7 +170,8 @@ class VoiceBottomSheet extends StatelessWidget {
           //bottom center voice assistant button
           Align(
             alignment: Alignment.bottomCenter,
-            child: state is VoiceInitial
+            child: state is VoiceInitial ||
+                    state is VoiceResponse
                 ? Padding(
                     padding:
                         const EdgeInsets.only(bottom: 10),

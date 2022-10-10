@@ -7,6 +7,7 @@ enum DeviceType {
   ceiling_fan,
   pedestal_fan,
   table_fan,
+  desktop,
   fan,
   air_conditioner,
   air_cooler,

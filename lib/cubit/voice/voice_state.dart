@@ -18,7 +18,28 @@ class VoiceRecognized extends VoiceState {
   const VoiceRecognized(this.recognizedText);
 }
 
-class VoiceProcessing extends VoiceState {}
+class VoiceProcessing extends VoiceState {
+  const VoiceProcessing();
+}
+
+class VoiceResponse extends VoiceState {
+  final String response;
+  const VoiceResponse(this.response);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is VoiceResponse &&
+        other.response == response;
+  }
+
+  @override
+  int get hashCode => response.hashCode;
+
+  @override
+  String toString() => 'VoiceResponse(response: $response)';
+}
 
 class VoiceError extends VoiceState {
   final String error;

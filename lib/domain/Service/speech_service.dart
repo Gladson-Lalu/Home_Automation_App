@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
-class SpeechAPIClient {
+class SpeechService {
   final stt.SpeechToText _speech = stt.SpeechToText();
 
   final StreamController<String> _recognizedWords =
@@ -20,10 +20,11 @@ class SpeechAPIClient {
   Future<void> startListening() async {
     bool available = await _speech.initialize(
       onStatus: (val) {
-        print('onStatus: $val');
         _listeningStatusController.add(val);
       },
-      onError: (val) => print('onError: $val'),
+      onError: (val) {
+        _listeningStatusController.addError(val);
+      },
     );
     if (!available) {
       throw Exception(
@@ -34,7 +35,7 @@ class SpeechAPIClient {
         _recognizedWords.add(result.recognizedWords);
       },
       listenFor: const Duration(seconds: 10),
-      pauseFor: const Duration(milliseconds: 2500),
+      pauseFor: const Duration(seconds: 3),
       localeId: 'en_US',
       cancelOnError: true,
       partialResults: true,

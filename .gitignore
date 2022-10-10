@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# auth json from dialogflow 
+/assets/auth/dialog_flow_auth.json

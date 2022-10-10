@@ -1,9 +1,8 @@
-import '../../Service/speech_api.dart';
+import '../../Service/speech_service.dart';
 import 'speech_repository.dart';
 
 class SpeechRepositoryImpl implements SpeechRepository {
-  final SpeechAPIClient _speechAPIClient =
-      SpeechAPIClient();
+  final SpeechService _speechAPIClient = SpeechService();
 
   @override
   Stream<String> get recognizedWords =>

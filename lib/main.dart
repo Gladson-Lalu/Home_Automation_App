@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:home_automation/domain/Service/dialogflow_service.dart';
 import 'config/theme.dart';
 import 'cubit/location/home_location_cubit.dart';
 import 'cubit/settings/settings_cubit.dart';
@@ -47,8 +48,9 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 ThemeModeCubit(preferences)),
         BlocProvider(
-            create: (context) =>
-                VoiceCubit(SpeechRepositoryImpl())),
+            create: (context) => VoiceCubit(
+                SpeechRepositoryImpl(),
+                DialogflowService())),
       ],
       child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
         builder: (context, state) {
