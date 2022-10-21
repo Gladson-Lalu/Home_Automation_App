@@ -1,7 +1,7 @@
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:home_automation/domain/Service/dialogflow_service.dart';
+import '../../domain/Service/dialogflow_service.dart';
 import '../../domain/repository/speech/speech_repository.dart';
 
 part 'voice_state.dart';
@@ -39,8 +39,8 @@ class VoiceCubit extends Cubit<VoiceState> {
                       .startsWith('smarthome') &&
                   response.allRequiredParamsPresent ==
                       true) {
-                final String action =
-                    response.action!.split('.').last;
+                // final String action =
+                //     response.action!.split('.').last;
                 // print(action);
                 // print(response.parameters);
                 // print(replayMessage);

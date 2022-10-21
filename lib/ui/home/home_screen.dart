@@ -1,7 +1,7 @@
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../config/sample_devices.dart';
+import '../../cubit/electronic_devices/home/home_electronic_devices_cubit.dart';
 import '../../cubit/voice/voice_cubit.dart';
 import '../../domain/model/device.dart';
 import 'widgets/app_bar/custom_sliver_appbar.dart';
@@ -21,6 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<HomeElectronicDevicesCubit>(context)
+        .getConnectedDevices();
     selectedRoomIndex = 0;
   }
 
@@ -75,30 +77,90 @@ class _HomeScreenState extends State<HomeScreen> {
             const SliverToBoxAdapter(
               child: SizedBox(height: 30),
             ),
-            //tabs of rooms
-            buildRoomHeader(),
+            BlocConsumer<HomeElectronicDevicesCubit,
+                HomeElectronicDevicesState>(
+              listener: (context, state) {
+                if (state is HomeElectronicDevicesError) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                if (state is HomeElectronicDevicesLoaded) {
+                  return buildRoomHeader(state.roomDevices);
+                } else {
+                  return const SliverToBoxAdapter();
+                }
+              },
+            ),
             const SliverToBoxAdapter(
               child: SizedBox(height: 30),
             ),
             //smart devices
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  'Smart Devices',
-                  style:
-                      Theme.of(context).textTheme.headline6,
-                ),
-              ),
+            BlocBuilder<HomeElectronicDevicesCubit,
+                HomeElectronicDevicesState>(
+              builder: (context, state) {
+                if (state is HomeElectronicDevicesLoaded) {
+                  return SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        'Smart Devices',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6,
+                      ),
+                    ),
+                  );
+                } else {
+                  return const SliverToBoxAdapter();
+                }
+              },
             ),
             //list of devices
-            SliverPadding(
-              padding: EdgeInsets.symmetric(
-                  horizontal:
-                      MediaQuery.of(context).size.width *
-                          0.03,
-                  vertical: 10),
-              sliver: buildGridList(),
+            BlocBuilder<HomeElectronicDevicesCubit,
+                HomeElectronicDevicesState>(
+              builder: (context, state) {
+                if (state is HomeElectronicDevicesLoaded) {
+                  return SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context)
+                                .size
+                                .width *
+                            0.03,
+                        vertical: 10),
+                    sliver:
+                        buildGridList(state.roomDevices),
+                  );
+                } else if (state
+                    is HomeElectronicDevicesInitial) {
+                  return SliverToBoxAdapter(
+                    child: Center(
+                      child: Text(
+                        'No devices found',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .color,
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return const SliverToBoxAdapter(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+              },
             ),
             //Sized box
             const SliverToBoxAdapter(
@@ -111,7 +173,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SliverGrid buildGridList() {
+  SliverGrid buildGridList(
+      List<List<ElectronicDevice>> devices) {
     return SliverGrid(
       gridDelegate:
           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -122,15 +185,17 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return buildDeviceCard(context,
-              sampleDevices[selectedRoomIndex][index]);
+          return buildDeviceCard(
+              context, devices[selectedRoomIndex][index]);
         },
-        childCount: sampleDevices[selectedRoomIndex].length,
+        childCount: devices[selectedRoomIndex].length,
       ),
     );
   }
 
-  SliverToBoxAdapter buildRoomHeader() {
+  SliverToBoxAdapter buildRoomHeader(
+    List<List<ElectronicDevice>> roomDevices,
+  ) {
     return SliverToBoxAdapter(
       child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.03,
@@ -138,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding:
               const EdgeInsets.symmetric(horizontal: 10),
           scrollDirection: Axis.horizontal,
-          itemCount: sampleDevices.length,
+          itemCount: roomDevices.length,
           itemBuilder: (context, index) {
             return InkWell(
               splashColor: Colors.transparent,
@@ -160,20 +225,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 2,
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 0),
-                  child: Center(
-                    child: Text(
-                        sampleDevices[index][0].room,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(
-                                fontSize: 15,
-                                fontWeight:
-                                    FontWeight.w500)),
-                  ),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 10, vertical: 0),
+                child: Center(
+                  child: Text(roomDevices[index][0].room,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500)),
                 ),
               ),
             );
@@ -224,9 +285,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 inactiveThumbColor: Colors.white,
                 value: device.state,
                 onChanged: (value) {
-                  setState(() {
-                    device.state = value;
-                  });
+                  BlocProvider.of<
+                              HomeElectronicDevicesCubit>(
+                          context)
+                      .changeState(device.id, value);
                 },
                 activeColor: Theme.of(context).focusColor,
               ),

@@ -14,7 +14,8 @@ const Color darkTitlecolor = Color(0xffF9F9F3);
 const Color darkContainerBG = Color(0xff435968);
 const Color darkSecondaryBG = Color(0xff11B5E4);
 const Color darkContainerText = Color(0xffF9F9F3);
-const Color darkFocusColor = Color(0xffffffff);
+const Color darkFocusColor =
+    Color.fromARGB(255, 63, 188, 223);
 const Color darkTextcolor =
     Color.fromARGB(255, 236, 236, 236);
 Color darkPrimarycolor = const Color(0xff0f2228);

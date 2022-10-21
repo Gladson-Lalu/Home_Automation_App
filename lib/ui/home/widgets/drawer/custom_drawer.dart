@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../devices/devices_screen.dart';
+import 'package:page_transition/page_transition.dart';
 import '../../../../cubit/theme_mode/theme_mode_cubit.dart';
 
 import 'dashboard_list_tile.dart';
@@ -94,7 +96,14 @@ class CustomDrawer extends StatelessWidget {
               children: [
                 DashboardListTile(
                   title: 'Devices',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: const DevicesScreen(),
+                            type: PageTransitionType.fade));
+                  },
                 ),
                 const SizedBox(height: 20),
                 DashboardListTile(

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:home_automation/domain/Service/dialogflow_service.dart';
+import 'cubit/electronic_devices/devices/devices_electronic_devices_cubit.dart';
+import 'cubit/electronic_devices/home/home_electronic_devices_cubit.dart';
+import 'domain/Service/db_service.dart';
+import 'domain/Service/dialogflow_service.dart';
+import 'domain/repository/database/local_db_repository.dart';
 import 'config/theme.dart';
 import 'cubit/location/home_location_cubit.dart';
 import 'cubit/settings/settings_cubit.dart';
 import 'cubit/theme_mode/theme_mode_cubit.dart';
 import 'cubit/voice/voice_cubit.dart';
+import 'domain/repository/database/local_db_repository_impl.dart';
 import 'domain/repository/speech/speech_repository_impl.dart';
 import 'domain/repository/weather/weather_repository_impl.dart';
 import 'ui/splash/splash_screen.dart';
@@ -27,11 +32,14 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   final SharedPreferences preferences;
+
   const MyApp({Key? key, required this.preferences})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final LocalDbRepository localDbRepository =
+        LocalDbRepositoryImpl(LocalDBService());
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -51,6 +59,14 @@ class MyApp extends StatelessWidget {
             create: (context) => VoiceCubit(
                 SpeechRepositoryImpl(),
                 DialogflowService())),
+        BlocProvider(
+            create: (context) => HomeElectronicDevicesCubit(
+                localDbRepository)),
+        BlocProvider(
+          create: (context) =>
+              DevicesElectronicDevicesCubit(
+                  localDbRepository),
+        ),
       ],
       child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
         builder: (context, state) {
