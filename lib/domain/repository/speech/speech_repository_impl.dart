@@ -1,8 +1,10 @@
-import '../../Service/speech_service.dart';
+import '../../service/speech_service.dart';
 import 'speech_repository.dart';
 
 class SpeechRepositoryImpl implements SpeechRepository {
-  final SpeechService _speechAPIClient = SpeechService();
+  final SpeechToTextService _speechAPIClient;
+
+  const SpeechRepositoryImpl(this._speechAPIClient);
 
   @override
   Stream<String> get recognizedWords =>

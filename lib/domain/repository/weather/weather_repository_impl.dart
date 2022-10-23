@@ -1,12 +1,13 @@
 import 'dart:convert';
 
-import '../../Service/weather_api.dart';
+import '../../service/weather_api.dart';
 import '../../model/weather_model.dart';
 import 'weather_repository.dart';
 
 class WeatherRepositoryImpl implements WeatherRepository {
-  final OpenWeatherAPIClient _openWeatherAPIClient =
-      OpenWeatherAPIClient();
+  final OpenWeatherAPIClient _openWeatherAPIClient;
+
+  const WeatherRepositoryImpl(this._openWeatherAPIClient);
 
   @override
   Future<Weather> getWeather(

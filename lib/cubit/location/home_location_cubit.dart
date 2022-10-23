@@ -3,10 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/model/home_location_model.dart';
 import '../weather/weather_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../domain/model/home_location.dart';
 
 part 'home_location_state.dart';
 

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../domain/manager/devices_manager.dart';
 import '../../../domain/model/device.dart';
 import '../../../domain/repository/database/local_db_repository.dart';
 
@@ -8,12 +9,12 @@ part 'devices_electronic_devices_state.dart';
 class DevicesElectronicDevicesCubit
     extends Cubit<DevicesElectronicDevicesState> {
   final LocalDbRepository _localDbRepository;
-  DevicesElectronicDevicesCubit(this._localDbRepository)
+  final DevicesManager _devicesHandler;
+  DevicesElectronicDevicesCubit(
+      this._localDbRepository, this._devicesHandler)
       : super(const DevicesElectronicDevicesInitial()) {
     try {
-      _localDbRepository
-          .getAllDevicesStream()
-          .listen((devices) {
+      _localDbRepository.allDevicesStream.listen((devices) {
         if (devices.isNotEmpty) {
           emit(DevicesElectronicDevicesLoaded(devices));
         } else {
@@ -44,8 +45,7 @@ class DevicesElectronicDevicesCubit
   void changeDeviceState(int deviceId, bool state) async {
     try {
       emit(const DevicesElectronicDevicesLoading());
-      _localDbRepository.setElectronicDeviceState(
-          deviceId, state);
+      _devicesHandler.changeDeviceState(deviceId, state);
     } on Exception catch (e) {
       emit(DevicesElectronicDevicesError(e.toString()));
     }

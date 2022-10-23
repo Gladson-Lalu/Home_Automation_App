@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:home_automation/cubit/bluetooth/bluetooth_cubit.dart';
+import 'domain/manager/devices_manager.dart';
+import 'domain/repository/bluetooth/bluetooth_repository_impl.dart';
+import 'domain/service/speech_service.dart';
+import 'domain/service/weather_api.dart';
 import 'cubit/electronic_devices/devices/devices_electronic_devices_cubit.dart';
 import 'cubit/electronic_devices/home/home_electronic_devices_cubit.dart';
-import 'domain/Service/db_service.dart';
-import 'domain/Service/dialogflow_service.dart';
+import 'domain/service/bluetooth_service.dart';
+import 'domain/service/db_service.dart';
+import 'domain/service/dialogflow_service.dart';
 import 'domain/repository/database/local_db_repository.dart';
 import 'config/theme.dart';
 import 'cubit/location/home_location_cubit.dart';
-import 'cubit/settings/settings_cubit.dart';
 import 'cubit/theme_mode/theme_mode_cubit.dart';
 import 'cubit/voice/voice_cubit.dart';
 import 'domain/repository/database/local_db_repository_impl.dart';
@@ -32,40 +37,48 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   final SharedPreferences preferences;
-
   const MyApp({Key? key, required this.preferences})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final LocalDbRepository localDbRepository =
-        LocalDbRepositoryImpl(LocalDBService());
+        LocalDbRepositoryImpl(ObjectBoxDBService());
+    final DevicesManager devicesManager = DevicesManager(
+      BluetoothRepositoryImpl(
+          FlutterBlueBluetoothService()),
+      localDbRepository,
+    );
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) =>
-                WeatherCubit(WeatherRepositoryImpl())),
+            create: (context) => WeatherCubit(
+                WeatherRepositoryImpl(
+                    OpenWeatherAPIClient()))),
         BlocProvider(
             create: (context) => HomeLocationCubit(
                 BlocProvider.of<WeatherCubit>(context),
                 preferences)),
         BlocProvider(
             create: (context) =>
-                SettingsCubit(preferences)),
-        BlocProvider(
-            create: (context) =>
                 ThemeModeCubit(preferences)),
         BlocProvider(
             create: (context) => VoiceCubit(
-                SpeechRepositoryImpl(),
+                SpeechRepositoryImpl(SpeechToTextService()),
                 DialogflowService())),
         BlocProvider(
             create: (context) => HomeElectronicDevicesCubit(
-                localDbRepository)),
+                localDbRepository, devicesManager)),
         BlocProvider(
           create: (context) =>
               DevicesElectronicDevicesCubit(
-                  localDbRepository),
+                  localDbRepository, devicesManager),
+        ),
+        BlocProvider(
+          create: (context) => BluetoothCubit(
+              BluetoothRepositoryImpl(
+                  FlutterBlueBluetoothService())),
         ),
       ],
       child: BlocBuilder<ThemeModeCubit, ThemeModeState>(

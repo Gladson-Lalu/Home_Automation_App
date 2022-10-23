@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubit/electronic_devices/home/home_electronic_devices_cubit.dart';
 import '../../cubit/voice/voice_cubit.dart';
 import '../../domain/model/device.dart';
-import 'widgets/app_bar/custom_sliver_appbar.dart';
+import '../home/widgets/app_bar/custom_sliver_appbar.dart';
 import 'widgets/drawer/custom_drawer.dart';
 import 'widgets/modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const CustomSliverAppBar(),
             //sized box
             const SliverToBoxAdapter(
-              child: SizedBox(height: 50),
+              child: SizedBox(height: 30),
             ),
             BlocConsumer<HomeElectronicDevicesCubit,
                 HomeElectronicDevicesState>(

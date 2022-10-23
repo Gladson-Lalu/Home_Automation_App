@@ -8,17 +8,17 @@ import '../../objectbox.g.dart';
 import '../model/device.dart';
 
 //singleton class for objectBox database
-class LocalDBService {
-  static final LocalDBService _dbService =
-      LocalDBService._internal();
+class ObjectBoxDBService {
+  static final ObjectBoxDBService _dbService =
+      ObjectBoxDBService._internal();
   late Store _store;
-  LocalDBService._internal() {
+  ObjectBoxDBService._internal() {
     _init();
   }
-  factory LocalDBService() {
+  factory ObjectBoxDBService() {
     return _dbService;
   }
-  Store get store => _store;
+
   void _init() async {
     try {
       final path = await getApplicationDocumentsDirectory();
@@ -33,129 +33,49 @@ class LocalDBService {
     }
   }
 
-  void initConnectedDevice(
-      List<Map<String, dynamic>> eDevices) {
-    try {
-      final box = Box<ElectronicDevice>(_store);
-      final List<ElectronicDevice> devices = box.getAll();
-      for (var element in eDevices) {
-        final device = devices.where(
-            (device) => device.id == element['deviceId']);
-        if (device.isEmpty) {
-          box.put(ElectronicDevice(
-              id: int.parse(element['deviceId']),
-              state: element['state'] == 'true',
-              icon: 'unknown',
-              name: 'unknown',
-              type: DeviceType.unknown,
-              room: 'unknown',
-              isConnected: true));
-        } else {
-          device.first.state = element['state'] == 'true';
-          device.first.isConnected = true;
-          box.put(device.first);
-        }
-      }
-    } on Exception {
-      rethrow;
-    }
-  }
-
-  Stream<List<List<ElectronicDevice>>>
-      getConnectedDevicesStream() {
-    try {
-      final box = Box<ElectronicDevice>(_store);
-      final StreamController<List<List<ElectronicDevice>>>
-          controller = StreamController<
-              List<List<ElectronicDevice>>>.broadcast();
-      box
+  Stream<List<ElectronicDevice>>
+      get connectedDevicesStream => Box<ElectronicDevice>(
+              _store)
           .query(ElectronicDevice_.isConnected.equals(true))
           .watch()
-          .listen((event) {
-        controller.add(getConnectedDevices());
-      });
-      return controller.stream;
-    } on Exception {
-      rethrow;
-    }
+          .map((query) => query.find());
+
+  Stream<List<ElectronicDevice>> get allDevicesStream =>
+      Box<ElectronicDevice>(_store)
+          .query()
+          .watch()
+          .map((query) => query.find());
+
+  void addDevices(List<ElectronicDevice> devices) {
+    final box = Box<ElectronicDevice>(_store);
+    box.putMany(devices);
   }
 
-  Stream<List<List<ElectronicDevice>>>
-      getAllDevicesStream() {
-    try {
-      final box = Box<ElectronicDevice>(_store);
-      final StreamController<List<List<ElectronicDevice>>>
-          controller = StreamController<
-              List<List<ElectronicDevice>>>.broadcast();
-      box.query().watch().listen((event) {
-        controller.add(getAllDevices());
-      });
-      return controller.stream;
-    } on Exception {
-      rethrow;
-    }
+  void addDevice(ElectronicDevice device) {
+    final box = Box<ElectronicDevice>(_store);
+    box.put(device);
   }
 
-  List<List<ElectronicDevice>> getAllDevices() {
-    try {
-      final box = Box<ElectronicDevice>(_store);
-      final devices = box.getAll();
-      final Map<String, List<ElectronicDevice>> map = {};
-      for (var device in devices) {
-        if (map.containsKey(device.room)) {
-          map[device.room]!.add(device);
-        } else {
-          map[device.room] = [device];
-        }
-      }
-      return map.values.toList();
-    } on Exception {
-      rethrow;
-    }
+  ElectronicDevice? getDeviceById(int id) {
+    final box = Box<ElectronicDevice>(_store);
+    return box.get(id);
   }
 
-  List<List<ElectronicDevice>> getConnectedDevices() {
-    try {
-      final devices = _store
-          .box<ElectronicDevice>()
-          .query(ElectronicDevice_.isConnected.equals(true))
-          .build()
-          .find();
-      final Map<String, List<ElectronicDevice>> map = {};
-      for (var device in devices) {
-        if (map.containsKey(device.room)) {
-          map[device.room]!.add(device);
-        } else {
-          map[device.room] = [device];
-        }
-      }
-      return map.values.toList();
-    } on Exception {
-      rethrow;
-    }
+  List<ElectronicDevice> getAllDevices() {
+    final box = Box<ElectronicDevice>(_store);
+    return box.getAll();
   }
 
-  //set ElectronicDevice state
-  void setElectronicDeviceState(int deviceId, bool state) {
-    try {
-      final box = Box<ElectronicDevice>(_store);
-      final device = box.get(deviceId);
-      if (device != null) {
-        device.state = state;
-        box.put(device);
-      }
-    } on Exception {
-      rethrow;
-    }
+  List<ElectronicDevice> getConnectedDevices() {
+    final box = Box<ElectronicDevice>(_store);
+    return box
+        .query(ElectronicDevice_.isConnected.equals(true))
+        .build()
+        .find();
   }
 
-  //update ElectronicDevice
-  void updateElectronicDevice(ElectronicDevice device) {
-    try {
-      final box = Box<ElectronicDevice>(_store);
-      box.put(device);
-    } on Exception {
-      rethrow;
-    }
+  void updateDevice(ElectronicDevice device) {
+    final box = Box<ElectronicDevice>(_store);
+    box.put(device);
   }
 }

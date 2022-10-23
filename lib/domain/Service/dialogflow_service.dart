@@ -26,7 +26,4 @@ class DialogflowService {
       throw Exception('No Result');
     }
   }
-
-  //check if the query is a short talk
-
 }

@@ -18,7 +18,10 @@
         ".gitignore": true,
         "lib/objectbox-model.json": true,
         ".idea": true,
-        ".vscode": true
+        ".vscode": true,
+        ".env": true,
+        "pubspec.lock": true,
+        "lib/objectbox.g.dart": true
     },
     "hide-files.files": [
         ".dart_tool",
@@ -33,7 +36,10 @@
         ".gitignore",
         "lib/objectbox-model.json",
         ".idea",
-        ".vscode"
+        ".vscode",
+        ".env",
+        "pubspec.lock",
+        "lib/objectbox.g.dart"
     ],
     "cSpell.words": [
         "aircooler",

@@ -1,7 +1,8 @@
 //singleton pattern
 import 'package:geocoding/geocoding.dart' as geo;
-import 'package:home_automation/domain/model/home_location.dart';
 import 'package:location/location.dart';
+
+import '../model/home_location_model.dart';
 
 class LocationService {
   LocationService._privateConstructor();

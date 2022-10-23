@@ -2,17 +2,17 @@ import 'dart:async';
 
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
-class SpeechService {
+class SpeechToTextService {
   final stt.SpeechToText _speech = stt.SpeechToText();
 
   final StreamController<String> _recognizedWords =
-      StreamController<String>.broadcast();
+      StreamController<String>();
   Stream<String> get recognizedWords =>
       _recognizedWords.stream;
 
   final StreamController<String>
       _listeningStatusController =
-      StreamController<String>.broadcast();
+      StreamController<String>();
 
   Stream<String> get listeningState =>
       _listeningStatusController.stream;

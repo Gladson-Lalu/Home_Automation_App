@@ -51,9 +51,11 @@ dependencies:
   path_provider: ^2.0.11
   objectbox_flutter_libs: ^1.6.2
   foundation_flutter: ^0.2.0
+  system_settings: ^2.1.0
   speech_to_text: ^6.0.0
   loading_animation_widget: ^1.2.0+3
-
+  flutter_blue: ^0.8.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
