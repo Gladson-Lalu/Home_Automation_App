@@ -30,12 +30,20 @@ class BluetoothRepositoryImpl extends BluetoothRepository {
       _flutterBlueBluetoothService.devices.transform(
           StreamTransformer.fromHandlers(
               handleData: (List<ScanResult> data, sink) {
-        print('data: $data.toString()');
         sink.add(data
             .map((e) => BluetoothDeviceModel(
-                name: e.advertisementData.localName,
+                name: (e.device.name == '')
+                    ? (e.device.type ==
+                            BluetoothDeviceType.unknown)
+                        ? 'Unknown device'
+                        : e.device.type
+                            .toString()
+                            .split('.')[1]
+                    : e.device.name,
                 address: e.device.id.id,
-                device: e.device))
+                device: e.device,
+                isConnectable:
+                    e.advertisementData.connectable))
             .toList());
       }));
 

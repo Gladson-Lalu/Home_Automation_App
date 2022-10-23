@@ -48,7 +48,9 @@ class FlutterBlueBluetoothService {
     });
 
     _flutterBlue.scanResults.listen((results) {
-      _devicesController.add(results);
+      if (results.isNotEmpty) {
+        _devicesController.add(results);
+      }
     });
   }
 
@@ -72,7 +74,6 @@ class FlutterBlueBluetoothService {
         }
         _device = device;
         _device!.state.listen((event) {
-          print(event);
           if (event == BluetoothDeviceState.disconnected) {
             _stateController
                 .add(BluetoothServiceState.disconnected);
@@ -92,9 +93,9 @@ class FlutterBlueBluetoothService {
         });
         _device!.connect(autoConnect: true).then((value) {
           _device!.discoverServices().then((value) {
-            print(value);
+            // print(value);
             for (var element in value[0].characteristics) {
-              print(element);
+              // print(element);
               element.setNotifyValue(true);
               element.value.listen((event) {
                 _readDataController.add(utf8.decode(event));

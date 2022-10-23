@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:home_automation/domain/service/location_service.dart';
 
 import '../../domain/model/home_location_model.dart';
 import '../weather/weather_cubit.dart';
@@ -42,4 +43,7 @@ class HomeLocationCubit extends Cubit<HomeLocationState> {
         latitude: homeLocation.latitude,
         longitude: homeLocation.longitude);
   }
+
+  Future<HomeLocation> get currentLocation =>
+      LocationService().getCurrentLocation();
 }

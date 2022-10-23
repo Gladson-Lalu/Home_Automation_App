@@ -182,13 +182,26 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                                       0.8),
                                           size: 30),
                                       onPressed: () {
-                                        BlocProvider.of<
-                                                    DevicesElectronicDevicesCubit>(
-                                                context)
-                                            .changeDeviceState(
-                                                device.id,
-                                                !device
-                                                    .state);
+                                        (device.isConnected)
+                                            ? BlocProvider.of<
+                                                        DevicesElectronicDevicesCubit>(
+                                                    context)
+                                                .changeDeviceState(
+                                                    device
+                                                        .id,
+                                                    !device
+                                                        .state)
+                                            : ScaffoldMessenger.of(
+                                                    context)
+                                                .showSnackBar(
+                                                const SnackBar(
+                                                  duration: Duration(
+                                                      milliseconds:
+                                                          500),
+                                                  content: Text(
+                                                      'Device is not connected'),
+                                                ),
+                                              );
                                       },
                                     ),
                                     //edit button

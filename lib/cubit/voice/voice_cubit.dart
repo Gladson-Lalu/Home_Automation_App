@@ -1,6 +1,7 @@
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:home_automation/domain/manager/devices_manager.dart';
 import '../../domain/service/dialogflow_service.dart';
 import '../../domain/repository/speech/speech_repository.dart';
 
@@ -9,10 +10,11 @@ part 'voice_state.dart';
 class VoiceCubit extends Cubit<VoiceState> {
   final SpeechRepository _speechRepository;
   final DialogflowService _dialogflowService;
+  final DevicesManager _devicesManager;
   String recognizedWords = '';
 
-  VoiceCubit(
-      this._speechRepository, this._dialogflowService)
+  VoiceCubit(this._speechRepository,
+      this._dialogflowService, this._devicesManager)
       : super(const VoiceInitial()) {
     try {
       _speechRepository.listeningState.listen((event) {
@@ -39,12 +41,16 @@ class VoiceCubit extends Cubit<VoiceState> {
                       .startsWith('smarthome') &&
                   response.allRequiredParamsPresent ==
                       true) {
-                // final String action =
-                //     response.action!.split('.').last;
-                // print(action);
-                // print(response.parameters);
-                // print(replayMessage);
-                emit(const VoiceDone());
+                final String action =
+                    response.action!.split('.').last;
+                try {
+                  print('params: ${response.parameters}');
+                  _devicesManager.executeAction(
+                      action, response.parameters!);
+                  emit(const VoiceDone());
+                } on Exception catch (e) {
+                  emit(VoiceError(e.toString()));
+                }
               }
             } else {
               emit(const VoiceInitial());

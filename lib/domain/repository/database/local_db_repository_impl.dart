@@ -51,7 +51,7 @@ class LocalDbRepositoryImpl implements LocalDbRepository {
   void changeDeviceState(int deviceId, bool state) {
     final device = _localDBService.getDeviceById(deviceId);
     if (device != null) {
-      device.isConnected = state;
+      device.state = state;
       _localDBService.updateDevice(device);
     }
   }
@@ -95,5 +95,13 @@ class LocalDbRepositoryImpl implements LocalDbRepository {
   List<List<ElectronicDevice>> getAllDevices() {
     return _transformDevices(
         _localDBService.getAllDevices());
+  }
+
+  @override
+  int getIdDeviceByRoomAndDeviceName(
+      String room, String deviceName) {
+    final device = _localDBService
+        .getDeviceByRoomAndDeviceName(room, deviceName);
+    return device?.id ?? -1;
   }
 }

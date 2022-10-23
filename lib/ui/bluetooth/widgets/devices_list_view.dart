@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,27 +21,49 @@ class BluetoothDeviceListBuilder extends StatelessWidget {
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                onTap: () {
-                  BlocProvider.of<BluetoothCubit>(context)
-                      .connectToDevice(
-                          snapshot.data![index]);
-                },
-                title: Text(
-                  snapshot.data![index].name,
-                  style: TextStyle(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color),
+              return Container(
+                decoration: BoxDecoration(
+                  color: snapshot.data![index].isConnectable
+                      ? Theme.of(context)
+                          .cardColor
+                          .withOpacity(0.4)
+                      : Theme.of(context)
+                          .cardColor
+                          .withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 10,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
                 ),
-                subtitle: Text(
-                    snapshot.data![index].address,
+                child: ListTile(
+                  enabled:
+                      snapshot.data![index].isConnectable,
+                  onTap: () {
+                    BlocProvider.of<BluetoothCubit>(context)
+                        .connectToDevice(
+                            snapshot.data![index]);
+                  },
+                  title: Text(
+                    snapshot.data![index].name,
                     style: TextStyle(
                         color: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .color)),
+                            .color),
+                  ),
+                  subtitle: Text(
+                      snapshot.data![index].address,
+                      style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .color)),
+                ),
               );
             },
           );

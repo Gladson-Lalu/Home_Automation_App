@@ -4,9 +4,12 @@ class BluetoothDeviceModel {
   final String name;
   final String address;
   final BluetoothDevice device;
+  final bool isConnectable;
 
-  const BluetoothDeviceModel(
-      {required this.name,
-      required this.address,
-      required this.device});
+  const BluetoothDeviceModel({
+    required this.name,
+    required this.address,
+    required this.device,
+    required this.isConnectable,
+  });
 }

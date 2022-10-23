@@ -78,4 +78,16 @@ class ObjectBoxDBService {
     final box = Box<ElectronicDevice>(_store);
     box.put(device);
   }
+
+  ElectronicDevice? getDeviceByRoomAndDeviceName(
+      String room, String deviceName) {
+    final box = Box<ElectronicDevice>(_store);
+    return box
+        .query(ElectronicDevice_.room
+            .equals(room, caseSensitive: false)
+            .and(ElectronicDevice_.name
+                .equals(deviceName, caseSensitive: false)))
+        .build()
+        .findFirst();
+  }
 }

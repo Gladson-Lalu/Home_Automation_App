@@ -44,9 +44,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final LocalDbRepository localDbRepository =
         LocalDbRepositoryImpl(ObjectBoxDBService());
+    final BluetoothRepositoryImpl bluetoothRepositoryImpl =
+        BluetoothRepositoryImpl(
+            FlutterBlueBluetoothService());
     final DevicesManager devicesManager = DevicesManager(
-      BluetoothRepositoryImpl(
-          FlutterBlueBluetoothService()),
+      bluetoothRepositoryImpl,
       localDbRepository,
     );
 
@@ -66,7 +68,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (context) => VoiceCubit(
                 SpeechRepositoryImpl(SpeechToTextService()),
-                DialogflowService())),
+                DialogflowService(),
+                devicesManager)),
         BlocProvider(
             create: (context) => HomeElectronicDevicesCubit(
                 localDbRepository, devicesManager)),
@@ -76,10 +79,8 @@ class MyApp extends StatelessWidget {
                   localDbRepository, devicesManager),
         ),
         BlocProvider(
-          create: (context) => BluetoothCubit(
-              BluetoothRepositoryImpl(
-                  FlutterBlueBluetoothService())),
-        ),
+            create: (context) =>
+                BluetoothCubit(bluetoothRepositoryImpl)),
       ],
       child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
         builder: (context, state) {

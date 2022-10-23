@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../extensions/capitalize.dart';
 
 import '../../../../cubit/location/home_location_cubit.dart';
-import '../../../../domain/service/location_service.dart';
 
 import '../../../../cubit/weather/weather_cubit.dart';
 import 'weather_detail_tile.dart';
@@ -142,8 +141,8 @@ class _WeatherWidgetState extends State<WeatherWidget> {
         return Center(
             child: InkWell(
           onTap: () {
-            LocationService()
-                .getCurrentLocation()
+            BlocProvider.of<HomeLocationCubit>(context)
+                .currentLocation
                 .then((value) {
               showDialog(
                   context: context,

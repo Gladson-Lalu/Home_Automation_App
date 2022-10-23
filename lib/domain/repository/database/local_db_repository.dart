@@ -11,4 +11,6 @@ abstract class LocalDbRepository {
   void updateElectronicDevice(ElectronicDevice device);
   void initConnectedDevice(
       List<Map<String, dynamic>> eDevices);
+  int getIdDeviceByRoomAndDeviceName(
+      String room, String deviceName);
 }
