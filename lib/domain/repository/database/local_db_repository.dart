@@ -13,4 +13,6 @@ abstract class LocalDbRepository {
       List<Map<String, dynamic>> eDevices);
   int getIdDeviceByRoomAndDeviceName(
       String room, String deviceName);
+
+  void addDevice(ElectronicDevice device);
 }

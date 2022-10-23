@@ -14,7 +14,16 @@ class DevicesManager {
       if (state == BluetoothServiceState.connected) {
         isConnected = true;
         _bluetoothRepository.readEvent.listen((event) {
-          // print(event);
+          if (event.isNotEmpty) {
+            final List<Map<String, dynamic>> data = [];
+            for (var item in event.split(',')) {
+              final keyValue = item.split(':');
+              data.add({
+                'deviceId': keyValue[0],
+                'state': keyValue[1]
+              });
+            }
+          }
         });
       } else if (state ==
           BluetoothServiceState.disconnected) {

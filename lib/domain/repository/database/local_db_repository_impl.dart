@@ -78,7 +78,7 @@ class LocalDbRepositoryImpl implements LocalDbRepository {
               type: DeviceType.unknown,
               icon: 'unknown'));
 
-      device.state = element['state'] == 'true';
+      device.state = element['state'] == '1';
       device.isConnected = true;
       return device;
     }).toList();
