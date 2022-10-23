@@ -53,4 +53,8 @@ class HomeElectronicDevicesCubit
       emit(HomeElectronicDevicesError(e.toString()));
     }
   }
+
+  void addSampleDevices() {
+    _localDbRepository.debugAddSampleDevices();
+  }
 }

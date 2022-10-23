@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:math';
+
+import 'package:home_automation/config/sample_devices.dart';
 
 import '../../service/db_service.dart';
 import '../../model/device.dart';
@@ -103,5 +106,19 @@ class LocalDbRepositoryImpl implements LocalDbRepository {
     final device = _localDBService
         .getDeviceByRoomAndDeviceName(room, deviceName);
     return device?.id ?? -1;
+  }
+
+  @override
+  void debugAddSampleDevices() {
+    for (var element in sampleDevices) {
+      for (var device in element) {
+        if (device.id % 6 == 0) {
+          device.isConnected = false;
+        } else {
+          device.isConnected = true;
+        }
+        _localDBService.addDevice(device);
+      }
+    }
   }
 }

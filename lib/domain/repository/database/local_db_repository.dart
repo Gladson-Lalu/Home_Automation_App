@@ -14,5 +14,5 @@ abstract class LocalDbRepository {
   int getIdDeviceByRoomAndDeviceName(
       String room, String deviceName);
 
-  void addDevice(ElectronicDevice device);
+  void debugAddSampleDevices();
 }
