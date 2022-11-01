@@ -1,33 +1,43 @@
+import '../model/bluetooth_state.dart';
 import '../repository/bluetooth/bluetooth_repository.dart';
 import '../repository/database/local_db_repository.dart';
-
-import '../model/bluetooth_state.dart';
 
 class DevicesManager {
   final BluetoothRepository _bluetoothRepository;
   final LocalDbRepository _localDbRepository;
-  bool isConnected =
-      true; //TODO: change to false when bluetooth is implemented
+  bool isConnected = true;
+  final List<String> buffer = [];
   DevicesManager(
       this._bluetoothRepository, this._localDbRepository) {
-    _bluetoothRepository.state.listen((state) {
-      if (state == BluetoothServiceState.connected) {
-        isConnected = true;
-        _bluetoothRepository.readEvent.listen((event) {
-          if (event.isNotEmpty) {
+    _bluetoothRepository.readEvent.listen((e) {
+      if (e.isNotEmpty) {
+        buffer.add(e);
+        if (e.contains("@")) {
+          final String text = buffer.join();
+          if (text.startsWith('done')) {
             final List<Map<String, dynamic>> data = [];
-            for (var item in event.split(',')) {
+            final List<String> values = text
+                .replaceFirst('done', '')
+                .replaceFirst(',@', '')
+                .trim()
+                .split(',');
+
+            for (var item in values) {
               final keyValue = item.split(':');
               data.add({
-                'deviceId': keyValue[0],
+                'id': keyValue[0],
                 'state': keyValue[1]
               });
             }
+            _localDbRepository.initConnectedDevice(data);
           }
-        });
-      } else if (state ==
-          BluetoothServiceState.disconnected) {
-        isConnected = false;
+          buffer.clear();
+        }
+      }
+    });
+    _bluetoothRepository.state.listen((event) {
+      if (event == BluetoothServiceState.connected) {
+        _bluetoothRepository.initDevices();
       }
     });
   }
@@ -35,8 +45,8 @@ class DevicesManager {
   void changeDeviceState(int deviceId, bool state) {
     try {
       if (isConnected) {
-        // _bluetoothRepository.writeDeviceState(
-        //     deviceId, state); //TODO: uncomment when bluetooth is implemented
+        _bluetoothRepository.writeDeviceState(
+            deviceId, state);
         _localDbRepository.changeDeviceState(
             deviceId, state);
       } else {

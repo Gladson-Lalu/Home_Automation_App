@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:home_automation/cubit/bluetooth/bluetooth_cubit.dart';
-import 'package:home_automation/ui/bluetooth/widgets/app_bar.dart';
-import 'package:home_automation/ui/bluetooth/widgets/devices_list_view.dart';
+import '../../cubit/bluetooth/bluetooth_cubit.dart';
+import 'widgets/app_bar.dart';
+import 'widgets/devices_list_view.dart';
 import 'package:system_settings/system_settings.dart';
 
 class BluetoothScreen extends StatelessWidget {
@@ -10,6 +10,7 @@ class BluetoothScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const Duration duration = Duration(milliseconds: 500);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: buildAppBar(context),
@@ -25,31 +26,38 @@ class BluetoothScreen extends StatelessWidget {
             } else if (state is BluetoothConnecting) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                    content: Text('Connecting...')),
+                    content: Text('Connecting...'),
+                    duration: duration),
               );
             } else if (state is BluetoothConnected) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Connected')),
+                const SnackBar(
+                    content: Text('Connected'),
+                    duration: duration),
               );
             } else if (state is BluetoothTurningOn) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                    content: Text('Turning on...')),
+                    content: Text('Turning on...'),
+                    duration: duration),
               );
             } else if (state is BluetoothTurningOff) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                    content: Text('Turning off...')),
+                    content: Text('Turning off...'),
+                    duration: duration),
               );
             } else if (state is BluetoothDisconnecting) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                    content: Text('Disconnecting...')),
+                    content: Text('Disconnecting...'),
+                    duration: duration),
               );
             } else if (state is BluetoothDisconnected) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                    content: Text('Disconnected')),
+                    content: Text('Disconnected'),
+                    duration: duration),
               );
             }
           },
@@ -129,7 +137,8 @@ class BluetoothScreen extends StatelessWidget {
               );
             } else if (state is BluetoothOn ||
                 state is BluetoothDisconnected ||
-                state is BluetoothConnecting) {
+                state is BluetoothConnecting ||
+                state is BluetoothError) {
               return const BluetoothDeviceListBuilder();
             } else {
               return Center(

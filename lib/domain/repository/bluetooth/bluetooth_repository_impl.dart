@@ -1,86 +1,72 @@
 import 'dart:async';
 
-import 'package:flutter_blue/flutter_blue.dart';
-import 'package:home_automation/domain/model/bluetooth_device.dart';
-import '../../service/bluetooth_service.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import '../../model/bluetooth_device.dart';
+import '../../service/bluetooth_serial_service.dart';
 import 'bluetooth_repository.dart';
 
 import '../../model/bluetooth_state.dart';
 
 class BluetoothRepositoryImpl extends BluetoothRepository {
-  final FlutterBlueBluetoothService
-      _flutterBlueBluetoothService;
-
+  final BluetoothSerialService _bluetoothSerialService;
   BluetoothRepositoryImpl(
-      this._flutterBlueBluetoothService);
+    this._bluetoothSerialService,
+  ) {
+    _bluetoothSerialService.init();
+  }
 
   @override
   void connectToDevice(BluetoothDeviceModel device) {
-    return _flutterBlueBluetoothService
-        .connectToDevice(device.device);
+    _bluetoothSerialService.connectToDevice(device.address);
   }
 
   @override
   void disconnect() {
-    return _flutterBlueBluetoothService.disconnect();
+    _bluetoothSerialService.disconnect();
   }
 
   @override
-  Stream<List<BluetoothDeviceModel>> get devices =>
-      _flutterBlueBluetoothService.devices.transform(
-          StreamTransformer.fromHandlers(
-              handleData: (List<ScanResult> data, sink) {
-        sink.add(data
-            .map((e) => BluetoothDeviceModel(
-                name: (e.device.name == '')
-                    ? (e.device.type ==
-                            BluetoothDeviceType.unknown)
-                        ? 'Unknown device'
-                        : e.device.type
-                            .toString()
-                            .split('.')[1]
-                    : e.device.name,
-                address: e.device.id.id,
-                device: e.device,
-                isConnectable:
-                    e.advertisementData.connectable))
-            .toList());
-      }));
-
-  @override
-  Stream<bool> get isScanning =>
-      _flutterBlueBluetoothService.isScanning;
+  Future<List<BluetoothDeviceModel>> get devices async {
+    final List<BluetoothDevice> devices =
+        await _bluetoothSerialService.devices;
+    return devices
+        .map((BluetoothDevice e) => BluetoothDeviceModel(
+              name: e.name ?? "Unknown",
+              address: e.address,
+              isConnectable: e.isBonded,
+            ))
+        .toList();
+  }
 
   @override
   Stream<BluetoothServiceState> get state =>
-      _flutterBlueBluetoothService.state;
-
-  @override
-  void startScan() {
-    return _flutterBlueBluetoothService.startScan();
-  }
+      _bluetoothSerialService.state;
 
   @override
   void writeDeviceState(int deviceId, bool state) {
-    return _flutterBlueBluetoothService
-        .writeData('$deviceId:$state');
+    _bluetoothSerialService
+        .writeData('$deviceId:${state ? 1 : 0}');
+  }
+
+  @override
+  void isOn() {
+    _bluetoothSerialService.isOn();
+  }
+
+  @override
+  void initDevices() {
+    _bluetoothSerialService.writeData('init');
   }
 
   @override
   Stream<String> get readEvent =>
-      _flutterBlueBluetoothService.readData;
+      _bluetoothSerialService.readData;
 
   @override
-  void isOn() {
-    return _flutterBlueBluetoothService.isOn();
-  }
+  bool get isConnected =>
+      _bluetoothSerialService.isConnected;
 
   @override
-  void stopScan() {
-    return _flutterBlueBluetoothService.stopScan();
-  }
-
-  @override
-  BluetoothDevice get device =>
-      _flutterBlueBluetoothService.getDevice();
+  Stream<String> get errorStream =>
+      _bluetoothSerialService.errorStream;
 }

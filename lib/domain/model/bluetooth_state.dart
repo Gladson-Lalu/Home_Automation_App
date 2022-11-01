@@ -4,8 +4,8 @@ enum BluetoothServiceState {
   on,
   turningOff,
   off,
-  connecting,
   connected,
-  disconnecting,
   disconnected,
+  connecting,
+  disconnecting,
 }

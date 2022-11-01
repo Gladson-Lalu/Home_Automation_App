@@ -1,7 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:home_automation/cubit/bluetooth/bluetooth_cubit.dart';
+import '../../cubit/bluetooth/bluetooth_cubit.dart';
 
 import '../home/home_screen.dart';
 import 'package:page_transition/page_transition.dart';

@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'dart:math';
 
-import 'package:home_automation/config/sample_devices.dart';
+import '../../../config/sample_devices.dart';
 
 import '../../service/db_service.dart';
 import '../../model/device.dart';
@@ -71,9 +70,9 @@ class LocalDbRepositoryImpl implements LocalDbRepository {
     final List<ElectronicDevice> connectedDevices =
         eDevices.map((element) {
       final device = devices.firstWhere(
-          (device) => device.id == element['deviceId'],
+          (device) => device.id == int.parse(element['id']),
           orElse: () => ElectronicDevice(
-              id: int.parse(element['deviceId']),
+              id: int.parse(element['id']),
               name: 'unknown',
               room: 'unknown',
               isConnected: true,

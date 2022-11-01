@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../devices/devices_screen.dart';
 import 'package:page_transition/page_transition.dart';
-import '../../../../cubit/theme_mode/theme_mode_cubit.dart';
 
+import '../../../../cubit/theme_mode/theme_mode_cubit.dart';
+import '../../../devices/devices_screen.dart';
 import 'dashboard_list_tile.dart';
 
 class CustomDrawer extends StatelessWidget {

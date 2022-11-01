@@ -1,7 +1,7 @@
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:home_automation/domain/manager/devices_manager.dart';
+import '../../domain/manager/devices_manager.dart';
 import '../../domain/service/dialogflow_service.dart';
 import '../../domain/repository/speech/speech_repository.dart';
 
@@ -44,7 +44,6 @@ class VoiceCubit extends Cubit<VoiceState> {
                 final String action =
                     response.action!.split('.').last;
                 try {
-                  print('params: ${response.parameters}');
                   _devicesManager.executeAction(
                       action, response.parameters!);
                   emit(const VoiceDone());

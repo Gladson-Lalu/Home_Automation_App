@@ -38,19 +38,7 @@ class BluetoothConnecting extends BluetoothState {
 }
 
 class BluetoothConnected extends BluetoothState {
-  final BluetoothDevice device;
-  const BluetoothConnected(this.device);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is BluetoothConnected &&
-        other.device == device;
-  }
-
-  @override
-  int get hashCode => device.hashCode;
+  const BluetoothConnected();
 }
 
 class BluetoothDisconnected extends BluetoothState {

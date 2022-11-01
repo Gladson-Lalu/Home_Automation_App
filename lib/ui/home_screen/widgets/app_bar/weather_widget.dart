@@ -7,7 +7,7 @@ import '../../../../domain/service/location_service.dart';
 
 import '../../../../cubit/weather/weather_cubit.dart';
 import '../../../home/widgets/app_bar/weather_detail_tile.dart';
-import 'weather_icon_and_temperature.dart';
+import '../../../home/widgets/app_bar/weather_icon_and_temperature.dart';
 
 class WeatherWidget extends StatefulWidget {
   const WeatherWidget({Key? key}) : super(key: key);

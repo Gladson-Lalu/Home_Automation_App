@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:home_automation/cubit/bluetooth/bluetooth_cubit.dart';
+import 'cubit/bluetooth/bluetooth_cubit.dart';
+import 'domain/service/bluetooth_serial_service.dart';
 import 'domain/manager/devices_manager.dart';
 import 'domain/repository/bluetooth/bluetooth_repository_impl.dart';
 import 'domain/service/speech_service.dart';
 import 'domain/service/weather_api.dart';
 import 'cubit/electronic_devices/devices/devices_electronic_devices_cubit.dart';
 import 'cubit/electronic_devices/home/home_electronic_devices_cubit.dart';
-import 'domain/service/bluetooth_service.dart';
 import 'domain/service/db_service.dart';
 import 'domain/service/dialogflow_service.dart';
 import 'domain/repository/database/local_db_repository.dart';
@@ -45,8 +45,7 @@ class MyApp extends StatelessWidget {
     final LocalDbRepository localDbRepository =
         LocalDbRepositoryImpl(ObjectBoxDBService());
     final BluetoothRepositoryImpl bluetoothRepositoryImpl =
-        BluetoothRepositoryImpl(
-            FlutterBlueBluetoothService());
+        BluetoothRepositoryImpl(BluetoothSerialService());
     final DevicesManager devicesManager = DevicesManager(
       bluetoothRepositoryImpl,
       localDbRepository,

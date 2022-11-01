@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:home_automation/cubit/bluetooth/bluetooth_cubit.dart';
-import 'package:home_automation/ui/bluetooth/bluetooth_screen.dart';
+import '../../../../cubit/bluetooth/bluetooth_cubit.dart';
+import '../../../bluetooth/bluetooth_screen.dart';
 
 import 'weather_widget.dart';
 

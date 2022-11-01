@@ -14,7 +14,8 @@ AppBar buildAppBar(BuildContext context) {
     title: BlocBuilder<BluetoothCubit, BluetoothState>(
         builder: (context, state) {
       if (state is BluetoothConnected) {
-        return Text('Connected to ${state.device.name}',
+        return Text(
+            'Connected to ${context.read<BluetoothCubit>().connectedDevice?.name ?? 'Controller'}',
             style: TextStyle(
                 color: Theme.of(context)
                     .textTheme
@@ -76,7 +77,8 @@ AppBar buildAppBar(BuildContext context) {
       BlocBuilder<BluetoothCubit, BluetoothState>(
         builder: (context, state) {
           if (state is BluetoothOn ||
-              state is BluetoothDisconnected) {
+              state is BluetoothDisconnected ||
+              state is BluetoothError) {
             return StreamBuilder<bool>(
                 stream:
                     BlocProvider.of<BluetoothCubit>(context)
@@ -84,11 +86,7 @@ AppBar buildAppBar(BuildContext context) {
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data!) {
                     return IconButton(
-                      onPressed: () {
-                        BlocProvider.of<BluetoothCubit>(
-                                context)
-                            .stopScanning();
-                      },
+                      onPressed: null,
                       icon: Stack(
                         alignment: Alignment.center,
                         children: [
@@ -119,7 +117,7 @@ AppBar buildAppBar(BuildContext context) {
                       onPressed: () {
                         BlocProvider.of<BluetoothCubit>(
                                 context)
-                            .startScanning();
+                            .getDevices();
                       },
                       icon: Icon(
                         Icons.bluetooth,
@@ -139,10 +137,17 @@ AppBar buildAppBar(BuildContext context) {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
+                        backgroundColor: Theme.of(context)
+                            .backgroundColor,
                         title:
                             const Text('Disconnect Device'),
                         content: Text(
-                            'Are you sure you want to disconnect from ${state.device.name}?'),
+                            'Are you sure you want to disconnect from ${BlocProvider.of<BluetoothCubit>(context).connectedDevice?.name ?? 'Controller'}?',
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color)),
                         actions: [
                           TextButton(
                               onPressed: () {

@@ -11,9 +11,9 @@ class BluetoothDeviceListBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<BluetoothDeviceModel>>(
-      stream:
-          BlocProvider.of<BluetoothCubit>(context).devices,
+    return FutureBuilder<List<BluetoothDeviceModel>>(
+      future: BlocProvider.of<BluetoothCubit>(context)
+          .getDevices(),
       builder: (context, snapshot) {
         if (snapshot.hasData &&
             snapshot.data != null &&
@@ -22,11 +22,13 @@ class BluetoothDeviceListBuilder extends StatelessWidget {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               return Container(
+                margin: const EdgeInsets.symmetric(
+                    horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
                   color: snapshot.data![index].isConnectable
                       ? Theme.of(context)
                           .cardColor
-                          .withOpacity(0.4)
+                          .withAlpha(60)
                       : Theme.of(context)
                           .cardColor
                           .withOpacity(0.1),
@@ -93,7 +95,7 @@ class BluetoothDeviceListBuilder extends StatelessWidget {
                   ),
                   onPressed: () {
                     BlocProvider.of<BluetoothCubit>(context)
-                        .startScanning();
+                        .getDevices();
                   },
                   child: Text(
                     'Scan again',

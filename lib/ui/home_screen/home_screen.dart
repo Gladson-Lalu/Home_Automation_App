@@ -6,8 +6,8 @@ import '../../cubit/electronic_devices/home/home_electronic_devices_cubit.dart';
 import '../../cubit/voice/voice_cubit.dart';
 import '../../domain/model/device.dart';
 import '../home/widgets/app_bar/custom_sliver_appbar.dart';
+import '../home/widgets/modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'widgets/drawer/custom_drawer.dart';
-import 'widgets/modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
