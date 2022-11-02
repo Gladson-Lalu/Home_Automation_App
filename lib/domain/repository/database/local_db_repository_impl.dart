@@ -73,7 +73,7 @@ class LocalDbRepositoryImpl implements LocalDbRepository {
           (device) => device.id == int.parse(element['id']),
           orElse: () => ElectronicDevice(
               id: int.parse(element['id']),
-              name: 'unknown',
+              name: element['name'],
               room: 'unknown',
               isConnected: true,
               state: false,

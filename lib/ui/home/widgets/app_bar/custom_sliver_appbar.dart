@@ -15,6 +15,7 @@ class CustomSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      automaticallyImplyLeading: false,
       pinned: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(

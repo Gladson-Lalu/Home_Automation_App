@@ -3,11 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../model/bluetooth_state.dart';
 
 class BluetoothSerialService {
   final FlutterBluetoothSerial _flutterBluetoothSerial =
       FlutterBluetoothSerial.instance;
+  bool permissionGranted = false;
   BluetoothConnection? _connection;
   final StreamController<BluetoothServiceState>
       _stateController =
@@ -25,10 +27,16 @@ class BluetoothSerialService {
 
   bool get isConnected => _connection != null;
 
-  Future<List<BluetoothDevice>> get devices =>
-      _flutterBluetoothSerial.getBondedDevices();
+  Future<List<BluetoothDevice>> get devices async {
+    permissionGranted = await _requestPermission();
+    if (permissionGranted) {
+      return _flutterBluetoothSerial.getBondedDevices();
+    } else {
+      return Future.value([]);
+    }
+  }
 
-  void init() {
+  void init() async {
     _flutterBluetoothSerial
         .onStateChanged()
         .listen((BluetoothState state) {
@@ -53,18 +61,18 @@ class BluetoothSerialService {
     });
   }
 
-  // Future<bool> _requestPermission() async {
-  //   Map<Permission, PermissionStatus> status = await [
-  //     Permission.bluetooth,
-  //     Permission.bluetoothConnect,
-  //     Permission.bluetoothScan,
-  //     Permission.location,
-  //   ].request();
-  //   return status[Permission.location]!.isGranted &&
-  //       status[Permission.bluetooth]!.isGranted &&
-  //       status[Permission.bluetoothConnect]!.isGranted &&
-  //       status[Permission.bluetoothScan]!.isGranted;
-  // }
+  Future<bool> _requestPermission() async {
+    Map<Permission, PermissionStatus> status = await [
+      Permission.bluetooth,
+      Permission.bluetoothConnect,
+      Permission.bluetoothScan,
+      Permission.location,
+    ].request();
+    return status[Permission.location]!.isGranted &&
+        status[Permission.bluetooth]!.isGranted &&
+        status[Permission.bluetoothConnect]!.isGranted &&
+        status[Permission.bluetoothScan]!.isGranted;
+  }
 
   void connectToDevice(String address) {
     _stateController.add(BluetoothServiceState.connecting);

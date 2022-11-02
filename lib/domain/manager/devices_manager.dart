@@ -26,7 +26,10 @@ class DevicesManager {
               final keyValue = item.split(':');
               data.add({
                 'id': keyValue[0],
-                'state': keyValue[1]
+                'state': keyValue[1],
+                'name': keyValue.length > 2
+                    ? keyValue[2]
+                    : 'unknown',
               });
             }
             _localDbRepository.initConnectedDevice(data);

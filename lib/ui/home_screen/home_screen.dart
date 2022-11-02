@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
           FloatingActionButtonAnimator.scaling,
       floatingActionButtonLocation:
           FloatingActionButtonLocation.centerDocked,
+
       //voice assistant button at bottom center
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10),
