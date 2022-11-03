@@ -13,6 +13,4 @@ abstract class LocalDbRepository {
       List<Map<String, dynamic>> eDevices);
   int getIdDeviceByRoomAndDeviceName(
       String room, String deviceName);
-
-  void debugAddSampleDevices();
 }

@@ -1,9 +1,10 @@
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../domain/manager/devices_manager.dart';
-import '../../domain/service/dialogflow_service.dart';
 import '../../domain/repository/speech/speech_repository.dart';
+import '../../domain/service/dialogflow_service.dart';
 
 part 'voice_state.dart';
 

@@ -140,48 +140,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     is HomeElectronicDevicesInitial) {
                   return SliverToBoxAdapter(
                     child: Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            'No devices found',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .color,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context)
-                                        .focusColor,
-                                shape:
-                                    RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(
-                                          10),
-                                ),
-                              ),
-                              onPressed: () {
-                                BlocProvider.of<
-                                            HomeElectronicDevicesCubit>(
-                                        context)
-                                    .addSampleDevices();
-                              },
-                              // ignore: prefer_const_constructors
-                              child: Text(
-                                  'Add sample devices',
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .color,
-                                  ))),
-                        ],
+                      child: Text(
+                        'No devices found',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .color,
+                        ),
                       ),
                     ),
                   );

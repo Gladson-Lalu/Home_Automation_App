@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import '../../service/weather_api.dart';
 import '../../model/weather_model.dart';
+import '../../service/weather_api.dart';
 import 'weather_repository.dart';
 
 class WeatherRepositoryImpl implements WeatherRepository {
