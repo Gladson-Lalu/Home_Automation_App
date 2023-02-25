@@ -1,6 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:home_automation/cubit/auth/auth_cubit.dart';
+import 'package:home_automation/domain/repository/auth/auth_repository.dart';
 import 'cubit/bluetooth/bluetooth_cubit.dart';
 import 'domain/service/bluetooth_serial_service.dart';
 import 'domain/manager/devices_manager.dart';
@@ -26,9 +29,9 @@ import 'cubit/weather/weather_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   dotenv.load(fileName: '.env');
-  final SharedPreferences prefs =
-      await SharedPreferences.getInstance();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   runApp(MyApp(
     preferences: prefs,
@@ -37,8 +40,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   final SharedPreferences preferences;
-  const MyApp({Key? key, required this.preferences})
-      : super(key: key);
+  const MyApp({Key? key, required this.preferences}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,32 +56,27 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => WeatherCubit(
-                WeatherRepositoryImpl(
-                    OpenWeatherAPIClient()))),
+            create: (context) =>
+                WeatherCubit(WeatherRepositoryImpl(OpenWeatherAPIClient()))),
         BlocProvider(
             create: (context) => HomeLocationCubit(
-                BlocProvider.of<WeatherCubit>(context),
-                preferences)),
-        BlocProvider(
-            create: (context) =>
-                ThemeModeCubit(preferences)),
+                BlocProvider.of<WeatherCubit>(context), preferences)),
+        BlocProvider(create: (context) => ThemeModeCubit(preferences)),
         BlocProvider(
             create: (context) => VoiceCubit(
                 SpeechRepositoryImpl(SpeechToTextService()),
                 DialogflowService(),
                 devicesManager)),
         BlocProvider(
-            create: (context) => HomeElectronicDevicesCubit(
-                localDbRepository, devicesManager)),
+            create: (context) =>
+                HomeElectronicDevicesCubit(localDbRepository, devicesManager)),
         BlocProvider(
           create: (context) =>
-              DevicesElectronicDevicesCubit(
-                  localDbRepository, devicesManager),
+              DevicesElectronicDevicesCubit(localDbRepository, devicesManager),
         ),
         BlocProvider(
-            create: (context) =>
-                BluetoothCubit(bluetoothRepositoryImpl)),
+            create: (context) => BluetoothCubit(bluetoothRepositoryImpl)),
+        BlocProvider(create: (context) => AuthCubit(AuthRepository())),
       ],
       child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
         builder: (context, state) {

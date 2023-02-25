@@ -7,8 +7,7 @@ class DevicesManager {
   final LocalDbRepository _localDbRepository;
   bool isConnected = true;
   final List<String> buffer = [];
-  DevicesManager(
-      this._bluetoothRepository, this._localDbRepository) {
+  DevicesManager(this._bluetoothRepository, this._localDbRepository) {
     _bluetoothRepository.readEvent.listen((e) {
       if (e.isNotEmpty) {
         buffer.add(e);
@@ -27,9 +26,7 @@ class DevicesManager {
               data.add({
                 'id': keyValue[0],
                 'state': keyValue[1],
-                'name': keyValue.length > 2
-                    ? keyValue[2]
-                    : 'unknown',
+                'name': keyValue.length > 2 ? keyValue[2] : 'unknown',
               });
             }
             _localDbRepository.initConnectedDevice(data);
@@ -48,10 +45,8 @@ class DevicesManager {
   void changeDeviceState(int deviceId, bool state) {
     try {
       if (isConnected) {
-        _bluetoothRepository.writeDeviceState(
-            deviceId, state);
-        _localDbRepository.changeDeviceState(
-            deviceId, state);
+        _bluetoothRepository.writeDeviceState(deviceId, state);
+        _localDbRepository.changeDeviceState(deviceId, state);
       } else {
         throw Exception('Device is not connected');
       }
@@ -60,16 +55,14 @@ class DevicesManager {
     }
   }
 
-  void executeAction(
-      String intent, Map<String, dynamic> data) {
+  void executeAction(String intent, Map<String, dynamic> data) {
     try {
       if (isConnected) {
         final String? room = data['room'];
         final String? deviceName = data['device'];
         if (room != null && deviceName != null) {
           final int deviceId = _localDbRepository
-              .getIdDeviceByRoomAndDeviceName(
-                  room, deviceName);
+              .getIdDeviceByRoomAndDeviceName(room, deviceName);
           if (deviceId != -1) {
             if (intent == 'on') {
               changeDeviceState(deviceId, true);
@@ -80,8 +73,7 @@ class DevicesManager {
             throw Exception('Device not found');
           }
         } else {
-          throw Exception(
-              'Unable to get room or device name');
+          throw Exception('Unable to get room or device name');
         }
       } else {
         throw Exception('Device is not connected');
